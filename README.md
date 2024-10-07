@@ -1,5 +1,6 @@
 # Programming-Fundamentals-Project
-1st Semester Programming Fundamentals Project by :
+
+Sudoku Saga by :
 
 Abdul Samad Siddiqui
 
