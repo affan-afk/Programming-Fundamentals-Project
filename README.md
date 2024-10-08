@@ -2,7 +2,7 @@
 
 Sudoku Saga by :
 
-Abdul Samad Siddiqui
+Abdul Samad Siddiqui (24K-1039)
 
 Muhammad Shahbaz Hassan (24K-0884)
 
