@@ -9,9 +9,13 @@ void print_board(char x)
 case 'u': //prints user_board.
   for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
-            printf("%d ", user_board[i][j]);
+            printf("|%d| ", user_board[i][j]);
         }
         printf("\n");
     }
+}
+}
+int main()
 {
-}  
+    print_board('u');
+}
