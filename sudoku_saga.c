@@ -4,7 +4,44 @@
 #define red "\e[0;31m" // red color
 #define def "\e[0m"   // set the color to default
 int user_board[10][10] = {0}; //global 2-D Array containing the elements of user's sudoku board.
+int user_solution_checker(){
+int arr[10]; //array jismein user_array se rows aur columns copy honge
+    for (int i = 1; i < 10; i++) //ye sari rows main repition check krega, agar aik bhi element repeat hogya to 0 return maarega!!!
+    {
+        for (int j = 1; j < 10; j++)
+        {
+       arr[j] = user_board[i][j];
+        }
+        for(int k = 1; k < 10;k++){ //ye loop basically row ka har element utha kr poore column main search krta for repitition
+            for (int l = 1 ; l < 10 ; l++ ){
+                if(k != l && arr[k] == arr[l]){
+                    return 0;
+                    
+                }
+            }
+        }
+    } //end row check!!!
+    for (int i = 1; i < 10; i++) //ye sare columns main repition check krega, agar aik bhi element repeat hogya to 0 return maarega!!!
+    {
+        for (int j = 1; j < 10; j++)
+        {
+       arr[j] = user_board[j][i];
+        }
+        for(int k = 1; k < 10;k++){ //ye loop basically column ka har element utha kr poore column main search krta for repitition
+            for (int l = 1 ; l < 10 ; l++ ){
+                if(k != l && arr[k] == arr[l]){
+                    return 0;
+                }
+            }
+        }
+    } //end column check!!!
 
+  
+  //YAHAN ABHI 3X3 KI SUB MATRICES MAIN REPEATED ELEMENTS CHECK KRNE KA CODE BAKI HAI!!!
+
+  
+    return 1; //ye return jab hoga kisi bhi row,column, aur 3x3 ki sub matrix main repeated element nahi mila, mtlb user ne sahi solve krdiya sudoku!!!!!!!!!!!!!!!
+}
 void print_board(char x) //x will specify which board to print. (user/possible answer/unsolved)
 {
   switch (x) 
