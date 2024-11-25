@@ -3,44 +3,132 @@
 #include<windows.h>
 #define red "\e[0;31m" // red color
 #define def "\e[0m"   // set the color to default
-int user_board[10][10] = {0}; //global 2-D Array containing the elements of user's sudoku board.
-int user_solution_checker(){
-int arr[10]; //array jismein user_array se rows aur columns copy honge
-    for (int i = 1; i < 10; i++) //ye sari rows main repition check krega, agar aik bhi element repeat hogya to 0 return maarega!!!
+
+void input();
+int user_solution_checker(int, int);
+void print_board(char);
+int end_input();
+int user_board[10][10] = {{0}}; //global 2-D Array containing the elements of user's sudoku board.
+int unsolved[10][10] = {0};
+void input(){
+    int i,j,x,y,_continue = 1;
+    char input[10];
+do
+{
+    system("cls");
+    print_board('u');
+    printf("\n");
+    // The first column and the first row will act as the coordinates, just like a chess board, so they need to be fixed, that is why another do while loop is Added below in case the user enters the coordinates with x=0 or y=0.  
+     if (end_input() == 1)
+    {
+        printf("Sudoku Board is complete! Press 0 to end the game or 1 if you wish to continue the game: ");
+        fgets(input,sizeof(input),stdin);
+        if (input[strlen(input) - 1] == '\n') {
+                input[strlen(input) - 1] = '\0';
+            }
+        sscanf(input,"%d",&_continue);
+    }
+    if (_continue == 0){
+        break;
+    } 
+    do{
+    printf("Enter the coordinates (x,y) = "); // For now here x is the row number and y is the column number 
+    if(fgets(input,sizeof(input),stdin)!= NULL){
+      if(sscanf(input,"%d,%d",&x,&y) ==2){
+         if (x >=1 && x<=9 && y>=1 && y <=9)
+         {
+            break;
+         }
+         else{
+            printf("Error: Coordinates must be between 1 and 9.\n");
+         }
+    }
+      else{
+         printf("Error: Invalid input. Enter coordinates in the format x,y.\n");
+         }
+    }
+   else{
+      printf("Error: Input could not be read.\n");
+      }
+    
+    }while(1);
+    // Another do while loop to prevent the user from entering anything except numbers from 1-9. 
+    do{
+    printf("Enter the value for (%d,%d) = ",x,y); // For now here x is the row number and y is the column number 
+    if(fgets(input,sizeof(input),stdin)!= NULL){
+      if(sscanf(input,"%d",&user_board[x][y]) == 1){
+         if (user_board[x][y] >=1 && user_board[x][y]<=9)
+         {
+            break;
+         }
+         else{
+            printf("Error: Value must be between 1 and 9.\n");
+         }
+    }
+      else{
+         printf("Error: Invalid input. Enter value and press enter.\n");
+         }
+    }
+   else{
+      printf("Error: Input could not be read.\n");
+      }
+    
+    }while(1);
+    if (user_solution_checker(x,y) == 1){
+        printf("Warning! There is repitition in row %d. Press any key to Continue \n",x);
+        getch();
+    }
+    if (user_solution_checker(x,y) == 2){
+        printf("Warning! There is repitition column %d. Press any key to Continue\n",y);
+        getch();
+    }
+   
+    
+} while (end_input() == 0 && _continue == 1);
+if (_continue == 0) {
+        printf("Game Over. Thanks for playing!\n");
+}
+}
+int end_input(){
+    for (int i = 1; i < 10; i++)
     {
         for (int j = 1; j < 10; j++)
         {
-       arr[j] = user_board[i][j];
-        }
-        for(int k = 1; k < 10;k++){ //ye loop basically row ka har element utha kr poore column main search krta for repitition
-            for (int l = 1 ; l < 10 ; l++ ){
-                if(k != l && arr[k] == arr[l]){
-                    return 0;
-                    
-                }
+            if(user_board[i][j] == 0){
+                return 0;
             }
         }
-    } //end row check!!!
-    for (int i = 1; i < 10; i++) //ye sare columns main repition check krega, agar aik bhi element repeat hogya to 0 return maarega!!!
+        
+    }
+   return 1; 
+}
+int user_solution_checker(int row,int col){
+    int arr[10] = {0};
+    for (int i = 1; i < 10; i++)
     {
-        for (int j = 1; j < 10; j++)
-        {
-       arr[j] = user_board[j][i];
-        }
-        for(int k = 1; k < 10;k++){ //ye loop basically column ka har element utha kr poore column main search krta for repitition
-            for (int l = 1 ; l < 10 ; l++ ){
-                if(k != l && arr[k] == arr[l]){
-                    return 0;
-                }
-            }
-        }
-    } //end column check!!!
-
-  
-  //YAHAN ABHI 3X3 KI SUB MATRICES MAIN REPEATED ELEMENTS CHECK KRNE KA CODE BAKI HAI!!!
-
-  
-    return 1; //ye return jab hoga kisi bhi row,column, aur 3x3 ki sub matrix main repeated element nahi mila, mtlb user ne sahi solve krdiya sudoku!!!!!!!!!!!!!!!
+       arr[user_board[row][i]]++;
+    }
+    for (int i = 1; i < 10; i++)
+    {
+       if (arr[i] > 1){
+       return 1;
+       }
+    }
+    for (int i = 1; i < 10; i++)
+    {
+        arr[i] = 0;
+    }
+    for (int i = 1; i < 10; i++)
+    {
+       arr[user_board[i][col]]++;
+    }
+    for (int i = 1; i < 10; i++)
+    {
+       if (arr[i] > 1){
+       return 2;
+       }
+    }
+    return 0;
 }
 void print_board(char x) //x will specify which board to print. (user/possible answer/unsolved)
 {
@@ -76,39 +164,44 @@ case 'u': //prints user_board.
         }
         printf("\n");
     }
+    break;
+    case 'q': //prints unsolved board
+    for(int j=0;j<10;j++){
+                unsolved[0][j]=j;
+                unsolved[j][0]=j;
+            }
+  for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+            // Adding color red to i=0 and j=0 as they will act as the coordinates 
+            if(i==0 || j==0)  
+           printf(red"%2d"def, unsolved[i][j]);
+           else 
+            printf("%2d", unsolved[i][j]);
+            // Below some code to separate the 3x3 blocks horizontally 
+            if(i==0 && (j==3 || j==6))
+                printf("  ");
+            else if(i!=0 && (j==3 || j==6))
+                printf(" |");
+        }
+        // Below some code to separate the 3x3 blocks vertically 
+        if(i==3 || i== 6){
+                printf("\n");
+            for(int j=0;j<10;j++){
+                if(j<3)
+                printf(" ");
+                else
+                printf("---");
+            }
+        }
+        printf("\n");
+    }
+    break;
+    
 }
 }
 
 int main()
 {
-int i,j,spaces=0,x,y;
-    // counting the places with zeros and storing the number in 'spaces', at first it will be 81.   
-for(i=0;i<9;i++){
-        for(j=0;j<9;j++){
-            if(user_board[i][j]==0){    
-                spaces++;
-            }
-        }
-}
-    // For now the main condition is based on the number of spaces, as the checking is not added yet.
-for(;spaces!=0;){ 
-    system("cls");
-    print_board('u');
-    printf("\n");
-    // The first column and the first row will act as the coordinates, just like a chess board, so they need to be fixed, that is why another do while loop is Added below in case the user enters the coordinates with x=0 or y=0.  
-    do{
-    printf("Enter the coordinates (x,y) = "); // For now here x is the row number and y is the column number 
-    scanf("%d,%d",&x,&y);
-    }while(x==0 || y==0);
-    if(user_board[x][y]==0){
-        spaces--;
-    }
-    // Another do while loop to prevent the user from entering numbers other than 0-9. 
-    do{
-    printf("Enter the value at %d row and %d column: ",x,y);
-    scanf("%d",&user_board[x][y]);
-    }while(user_board[x][y]<1 || user_board[x][y]>9);
-    }
-    getch();
+    input();
     return 0;
 }
