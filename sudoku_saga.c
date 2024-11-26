@@ -10,6 +10,39 @@ void print_board(char);
 int end_input();
 int user_board[10][10] = {{0}}; //global 2-D Array containing the elements of user's sudoku board.
 int unsolved[10][10] = {0};
+void box_checker(int i , int j ,int value ){
+	int c,d, k,l;
+	if (i>=1 && i<=3){
+    	c=3 ;
+	}
+	else if (i>=4 && i<=6){
+    	c=6 ;
+	}
+	else if (i>=7 && i<=9){
+    	c=9 ;
+	}
+	if (j>=1 && j<=3){
+    	d=3 ;
+	}
+	else if (j>=4 && j<=6){
+    	d=6 ;
+	}
+	else if (j>=7 && j<=9){
+    	d=9 ;
+    }
+	for (k=c-2;k<=c;k++){
+		for (l=d-2;l<=d;l++){
+			
+					if (i==k && j==l ){
+					}
+					else {
+						if (user_board[k][l]==value){
+							printf ("Invalid input!!\nTHE  %d IN ROW %d AND COLOUMN %d is present more than once in the 3 by 3 block\nPRESS ANY KEY TO CONTINUE ",user_board[i][j],i,j);getch();
+}
+}
+}
+}
+}
 void input(){
     int i,j,x,y,_continue = 1;
     char input[10];
@@ -18,6 +51,7 @@ do
     system("cls");
     print_board('u');
     printf("\n");
+    
     // The first column and the first row will act as the coordinates, just like a chess board, so they need to be fixed, that is why another do while loop is Added below in case the user enters the coordinates with x=0 or y=0.  
      if (end_input() == 1)
     {
@@ -38,6 +72,7 @@ do
          if (x >=1 && x<=9 && y>=1 && y <=9)
          {
             break;
+             
          }
          else{
             printf("Error: Coordinates must be between 1 and 9.\n");
@@ -74,6 +109,8 @@ do
       }
     
     }while(1);
+     int value = user_board[x][y];
+    box_checker(x ,  y , value );
     if (user_solution_checker(x,y) == 1){
         printf("Warning! There is repitition in row %d. Press any key to Continue \n",x);
         getch();
