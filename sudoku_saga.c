@@ -2,7 +2,10 @@
 #include<conio.h>
 #include<windows.h>
 #define red "\e[0;31m" // red color
+#define blue "\e[1;34m" // blue color
 #define def "\e[0m"   // set the color to default
+
+
 
 void input();
 int user_solution_checker(int, int);
@@ -37,7 +40,7 @@ void box_checker(int i , int j ,int value ){
 					}
 					else {
 						if (user_board[k][l]==value){
-							printf ("Invalid input!!\nTHE  %d IN ROW %d AND COLOUMN %d is present more than once in the 3 by 3 block\nPRESS ANY KEY TO CONTINUE ",user_board[i][j],i,j);getch();
+							printf (red"Warning!!\nTHE  %d IN ROW %d AND COLOUMN %d is present more than once in the 3 by 3 block\nPRESS ANY KEY TO CONTINUE\n "def,user_board[i][j],i,j);getch();
 }
 }
 }
@@ -75,15 +78,15 @@ do
              
          }
          else{
-            printf("Error: Coordinates must be between 1 and 9.\n");
+            printf(red"Error: Coordinates must be between 1 and 9.\n"def);
          }
     }
       else{
-         printf("Error: Invalid input. Enter coordinates in the format x,y.\n");
+         printf(red"Error: Invalid input. Enter coordinates in the format x,y.\n"def);
          }
     }
    else{
-      printf("Error: Input could not be read.\n");
+      printf(red"Error: Input could not be read.\n"def);
       }
     
     }while(1);
@@ -97,26 +100,26 @@ do
             break;
          }
          else{
-            printf("Error: Value must be between 1 and 9.\n");
+            printf(red"Error: Value must be between 1 and 9.\n"def);
          }
     }
       else{
-         printf("Error: Invalid input. Enter value and press enter.\n");
+         printf(red"Error: Invalid input. Enter value and press enter.\n"def);
          }
     }
    else{
-      printf("Error: Input could not be read.\n");
+      printf(red"Error: Input could not be read.\n"def);
       }
     
     }while(1);
      int value = user_board[x][y];
     box_checker(x ,  y , value );
     if (user_solution_checker(x,y) == 1){
-        printf("Warning! There is repitition in row %d. Press any key to Continue \n",x);
+        printf(red"Warning! There is repitition in row %d. Press any key to Continue \n"def,x);
         getch();
     }
     if (user_solution_checker(x,y) == 2){
-        printf("Warning! There is repitition column %d. Press any key to Continue\n",y);
+        printf(red"Warning! There is repitition column %d. Press any key to Continue\n"def,y);
         getch();
     }
    
@@ -180,7 +183,7 @@ case 'u': //prints user_board.
         for (int j = 0; j < 10; j++) {
             // Adding color red to i=0 and j=0 as they will act as the coordinates 
             if(i==0 || j==0)  
-           printf(red"%2d"def, user_board[i][j]);
+           printf(blue"%2d"def, user_board[i][j]);
            else 
             printf("%2d", user_board[i][j]);
             // Below some code to separate the 3x3 blocks horizontally 
