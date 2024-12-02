@@ -66,6 +66,44 @@ void box_checker(int i , int j ,int value ){
      		printf (red"Warning!!\nThe number %d is present more than once in the 3 by 3 subgrid. Press enter key to Continue\n"def,user_board[i][j],i,j);getch();
 	}
 }
+void remarks (int score , char level ){
+	if (level=='E' && score>=85 ){
+		printf (magneta"MARVELLOUS!!!!\nYOU SHOULD NOW PROCEED TO MEDIUM LEVEL DIFFICULTY IN SUDOKU SAGA"def);
+	}
+	else if (level=='E' && score>=75){
+		printf (magneta"VERY GOOD SCORE !!!"def);
+	}
+	else if (level=='E' && score>=65) {
+		printf (magneta"GOOD SCORE!!!"def);
+	}
+	else if (level=='E' && score<=65){
+		printf (magneta"DON'T WORRY\nKEEP TRYING....... YOU WILL IMPROVE SOON IN SHAA ALLAH"def);
+	}
+	if (level=='M' && score>=85 ){
+		printf (magneta"MARVELLOUS!!!!\nYOU SHOULD NOW PROCEED TO HARD LEVEL DIFFICULTY IN SUDOKU SAGA"def);
+	}
+	else if (level=='M' && score>=75){
+		printf (magneta"VERY GOOD SCORE !!!"def);
+	}
+	else if (level=='M' && score>=65) {
+		printf (magneta"GOOD SCORE!!!"def);
+	}
+	else if (level=='M' && score<=65){
+		printf (magneta"DON'T WORRY\nKEEP TRYING....... YOU WILL IMPROVE SOON IN SHAA ALLAH"def);
+	}
+	if (level=='H' && score>=85 ){
+		printf (magneta"MARVELLOUS!!!!\nYOU HAVE BECOME A PRO IN SUDOKU SOLVING (:-))"def);
+	}
+	else if (level=='H' && score>=75){
+		printf (magneta"VERY GOOD SCORE !!!"def);
+	}
+	else if (level=='H' && score>=65) {
+		printf (magneta"GOOD SCORE!!!"def);
+	}
+	else if (level=='H' && score<=65){
+		printf (magneta"DON'T WORRY\nKEEP TRYING.......\nIT IS THE HARDEST LEVEL SO IT'S TIME CONSUMING YOU WILL IMPROVE SOON IN SHAA ALLAH"def);
+	}
+}
 void input(){
     int i,j,x,y,_continue = 1;
     char input[10];
