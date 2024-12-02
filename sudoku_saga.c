@@ -16,13 +16,19 @@
     #define DARK_MAGENTA 5   // Dark Magenta
 
 
-
+void menu();
 void input();
+void displayScores();
 int user_solution_checker(int, int);
 void print_board(char);
 int end_input();
 int user_board[10][10] = {{0}}; //global 2-D Array containing the elements of user's sudoku board.
-int unsolved[10][10] = {0};
+int unsolved[10][10] = {{0}};
+int player_score;
+char player_name[30];
+void initializer(int);
+void score(time_t start, time_t end);
+void displaySudokuRules();
 void box_checker(int i , int j ,int value ){
 	int a=0;
 	int c,d, k,l;
@@ -57,7 +63,7 @@ void box_checker(int i , int j ,int value ){
 }
 }
  if (a==1){
-     		printf (red"Warning!!\nThe number %d is present more than once in the 3 by 3 block.\nPRESS ANY KEY TO CONTINUE\n"def,user_board[i][j],i,j);getch();
+     		printf (red"Warning!!\nThe number %d is present more than once in the 3 by 3 subgrid. Press enter key to Continue\n"def,user_board[i][j],i,j);getch();
 	}
 }
 void input(){
@@ -84,24 +90,31 @@ do
     } 
     do{
     fflush(stdin);
-    printf("Enter the coordinates (x,y) = "); // For now here x is the row number and y is the column number 
+    printf("Enter the coordinates in the form x,y = "); // For now here x is the row number and y is the column number 
     if(fgets(input,sizeof(input),stdin)!= NULL){
       if(sscanf(input,"%d,%d",&x,&y) ==2){
          if (x >=1 && x<=9 && y>=1 && y <=9)
          {
-            break;
-             
+            if (unsolved[x][y]!=0)
+            {
+                printf(red"Error: You cannot modify a pre-filled cell. Please try a different cell.  .\n"def);
+            }
+            else
+            {
+                break;
+            }
+            
          }
          else{
-            printf(red"Error: Coordinates must be between 1 and 9.\n"def);
+            printf(red"Error: Invalid input !!! Coordinates must be between 1 and 9.\n"def);
          }
     }
       else{
-         printf(red"Error: Invalid input. Enter coordinates in the format x,y.\n"def);
+         printf(red"Error: Invalid input !!! Enter coordinates in the format x,y.\n"def);
          }
     }
    else{
-      printf(red"Error: Input could not be read.\n"def);
+      printf(red"ERROR: Input could not be read.\n"def);
       }
     
     }while(1);
@@ -115,15 +128,15 @@ do
             break;
          }
          else{
-            printf(red"Error: Value must be between 1 and 9.\n"def);
+            printf(red"Invalid input !!!: Value must be between 1 and 9.\n"def);
          }
     }
       else{
-         printf(red"Error: Invalid input. Enter value and press enter.\n"def);
+         printf(red"Invalid input !!!: Invalid input. Enter value and press enter.\n"def);
          }
     }
    else{
-      printf(red"Error: Input could not be read.\n"def);
+      printf(red"ERROR: Input could not be read.\n"def);
       }
     
     }while(1);
@@ -139,10 +152,7 @@ do
     } 
    
     
-} while (end_input() == 0 && _continue == 1);
-if (_continue == 0) {
-        printf("Game Over. Thanks for playing!\n");
-}
+} while (_continue == 1);
 }
 int end_input(){
     for (int i = 1; i < 10; i++)
@@ -255,18 +265,137 @@ case 'u': //prints user_board.
 }
 }
 void menu(){
-	int Opt ;
-	printf (red"MENU"def);
-	printf (green"\nOption 1 : Information about sudoku and its rules  \nOption 2 : Start game  "def);
-	printf (red"\nYour option : "def);
-	scanf ("%d",&Opt);
-	while (Opt!=1 && Opt !=2){
-		printf ("Invalid input !!!\nKindly input option 1 or 2\nYour option :");
-		scanf ("%d",&Opt);
-		
-	}
-	if (Opt==1){
-		printf (blue"\nSudoku Rule Number 1: Use Numbers 1-9"def);getch();
+	int Opt;
+    int difficulty;
+    while(1){ 
+    printf(red"\nMENU\n"def);
+    printf(green"\nOption 1 : Information about sudoku and its rules\nOption 2 : Start New Game\nOption 3 : Display Scores\nOption 4 : Exit\n"def);
+    printf(red"\nYour option : "def);
+    scanf("%d", &Opt);
+    fflush(stdin);
+
+    while (Opt != 1 && Opt != 2 && Opt != 3 && Opt != 4) {
+        printf("Invalid input !!!\nKindly input option 1, 2, 3, or 4\nYour option :");
+        scanf("%d", &Opt);
+        fflush(stdin);
+    }
+
+    switch (Opt) {
+        case 1:
+            displaySudokuRules();
+            break;
+        case 2:
+        printf("Enter Player Name: ");
+        fgets(player_name,sizeof(player_name),stdin);
+        player_name[strcspn(player_name,"\n")] = '\0';
+        fflush(stdin);
+        printf (green"Difficulty Level:\n1. Easy\n2. Medium\n3. Hard"def);
+	    printf (red"\nYour option : "def);
+	    scanf ("%d",&difficulty);
+        fflush(stdin);
+    	while (difficulty!=1 && difficulty !=2 && difficulty!=3){
+    		printf ("Invalid input !!!\nKindly input 1 or 2 or 3\nYour option: ");
+    	    scanf ("%d",&difficulty);
+            fflush(stdin);
+    	}
+        initializer(difficulty);
+        time_t start = time(NULL);
+		input();
+        time_t end = time(NULL);  
+             score(start, end); 
+            break;
+        case 3:
+            {
+                displayScores();
+                break;
+            }
+        case 4:
+            printf("Exiting the program.\n");
+            return;
+            break;
+        default:
+            printf("Invalid choice\n");
+            break;
+    }
+    }
+}
+void setColor(int color) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, color);
+}
+
+
+int main(){
+    setColor(DARK_RED);
+	printf ("WELCOME TO THE SUDOKU SAGA, PRESS ANY KEY TO BEGIN ^_^ ");getch();system("cls");
+	menu();
+    return 0;
+}
+
+void score(time_t start, time_t end) {
+    player_score = 1000 - (difftime(end, start) * 0.6);
+    FILE *score_file = fopen("score.txt", "a");
+
+    if (score_file == NULL) {
+        printf("Error opening score file.\n");
+        return; 
+    }
+
+    if (player_score > 0) {
+        fprintf(score_file, "PLAYER NAME: %s  SCORE: %d\n", player_name, player_score);
+    } else {
+        fprintf(score_file, "PLAYER NAME: %s  SCORE: 0\n", player_name);
+    }
+
+    fclose(score_file);  
+}
+
+void initializer(int difficulty) {
+    FILE *boards;
+    if (difficulty == 1) {
+        boards = fopen("easy.txt", "r");
+    } else if (difficulty == 2) {
+        boards = fopen("medium.txt", "r");
+    } else {
+        boards = fopen("hard.txt", "r");
+    }
+
+    if (boards == NULL) { 
+        printf("Error opening file.\n");
+        return; 
+    }
+
+    srand(time(0));
+    int select = rand() % 20; 
+    int current_line = 0;
+    char line[200];
+
+    while (fgets(line, sizeof(line), boards)) {
+        if (current_line == select) {
+            break;
+        }
+        current_line++;
+    }
+    fclose(boards);
+    printf("%s\n",line);
+   
+    char* value = strtok(line, ",");
+    
+    
+    for (int i = 1; i < 10; i++) { 
+        for (int j = 1; j < 10; j++) { 
+            if (value != NULL) {
+                user_board[i][j] = atoi(value);   
+                unsolved[i][j] = user_board[i][j];
+                value = strtok(NULL, ","); 
+            }
+        }
+    }
+    
+    return;
+}
+void displaySudokuRules() {
+    printf (blue"\nSudoku Rule Number 1: "def);getch();
 		printf (magneta"\n\n  Sudoku is played on a grid of 9 x 9 spaces.\n  Within the rows and columns are 9 squares (made up of 3 x 3 spaces).\n  Each row, column and square (9 spaces each) needs to be filled out with the numbers\n  1-9,without repeating any numbers within the row, column or square.\n  Does it sound complicated?\n  Each Sudoku grid comes with a few spaces already filled in;the more spaces filled in, the easier the game - \n  The more difficult Sudoku puzzles have very few spaces that are already filled in."def);getch();
 		printf (blue"\n\nSudoku Rule Number 2: Don't Repeat Any Numbers"def);getch();
 		printf (magneta"\n\n  You can not repeat any numbers in the 3 x 3 grid .\n  Moreover you also cannot repeat the numbers in any rows or coloums of the whole 9 x 9 grid of sudoku "def);
@@ -336,25 +465,14 @@ void menu(){
      
     }
     getch();
-    printf ("\nNow let's start the game ");getch();
-    printf ("Choose from the options below\nEASY:E\nMEDIUM:M\nHARD:H");getch();
-    system("cls");
-    input ();
-
-	}
-	else if (Opt==2){
-		input();
-	}
-	
 }
-void setColor(int color) {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, color);
-}
-
-
-int main(){
-    setColor(DARK_RED);
-	printf ("WELCOME TO THE SUDOKU SAGA");getch();system("cls");
-	menu();
+void displayScores(){
+    FILE *playerscores = fopen("score.txt","r");
+    char buffer[256];
+    while(fgets(buffer,sizeof(buffer),playerscores)!= NULL){
+        printf(yello"%s",buffer);
+    }
+    fflush(stdin);
+    fclose(playerscores);
+    return;
 }
