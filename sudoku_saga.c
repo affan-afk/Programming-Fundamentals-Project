@@ -461,7 +461,7 @@ void displaySudokuRules() {
         for (int j = 0; j < 9; j++) {
             printf("%d ", sudoku[i][j]);
 
-			if (j==2 ||j==5 || j==8){
+			if (j==2 ||j==5 ){
 				printf ("|");
 			}
         }
@@ -491,7 +491,7 @@ void displaySudokuRules() {
 //        	if (i%3==0){
 //        		printf ("_");
 //			}
-			if (j==2 || j==5 ||j==8){
+			if (j==2 || j==5){
 				printf ("|");
 			}
            
