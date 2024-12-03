@@ -27,7 +27,7 @@ int unsolved[10][10] = {{0}};
 int player_score;
 char player_name[30];
 void initializer(int);
-void score(time_t start, time_t end);
+void score();
 void displaySudokuRules();
 void box_checker(int i , int j ,int value ){
 	int a=0;
@@ -58,6 +58,7 @@ void box_checker(int i , int j ,int value ){
 					else {
 						if (user_board[k][l]==value ){
 						a=1;
+						player_score-=20;
 }
 }   
 }
@@ -66,43 +67,45 @@ void box_checker(int i , int j ,int value ){
      		printf (red"Warning!!\nThe number %d is present more than once in the 3 by 3 subgrid. Press enter key to Continue\n"def,user_board[i][j],i,j);getch();
 	}
 }
-void remarks (int score , char level ){
-	if (level=='E' && score>=85 ){
+void remarks (int difficulty){
+	if (difficulty ==1 && player_score>=850 ){
 		printf (magneta"MARVELLOUS!!!!\nYOU SHOULD NOW PROCEED TO MEDIUM LEVEL DIFFICULTY IN SUDOKU SAGA"def);
 	}
-	else if (level=='E' && score>=75){
+	else if ( difficulty==1 && player_score>=750){
 		printf (magneta"VERY GOOD SCORE !!!"def);
 	}
-	else if (level=='E' && score>=65) {
+	else if (difficulty==1 && player_score>=650) {
 		printf (magneta"GOOD SCORE!!!"def);
 	}
-	else if (level=='E' && score<=65){
+	else if (difficulty==1 && player_score<=650){
 		printf (magneta"DON'T WORRY\nKEEP TRYING....... YOU WILL IMPROVE SOON IN SHAA ALLAH"def);
 	}
-	if (level=='M' && score>=85 ){
+	if (difficulty==2 && player_score>=850 ){
 		printf (magneta"MARVELLOUS!!!!\nYOU SHOULD NOW PROCEED TO HARD LEVEL DIFFICULTY IN SUDOKU SAGA"def);
 	}
-	else if (level=='M' && score>=75){
+	else if (difficulty==2 && player_score>=750){
 		printf (magneta"VERY GOOD SCORE !!!"def);
 	}
-	else if (level=='M' && score>=65) {
+	else if (difficulty==2 && player_score>=650) {
 		printf (magneta"GOOD SCORE!!!"def);
 	}
-	else if (level=='M' && score<=65){
+	else if (difficulty==2 && player_score<=650){
 		printf (magneta"DON'T WORRY\nKEEP TRYING....... YOU WILL IMPROVE SOON IN SHAA ALLAH"def);
 	}
-	if (level=='H' && score>=85 ){
+	if (difficulty==3 && player_score>=850 ){
 		printf (magneta"MARVELLOUS!!!!\nYOU HAVE BECOME A PRO IN SUDOKU SOLVING (:-))"def);
 	}
-	else if (level=='H' && score>=75){
+	else if (difficulty==3 && player_score>=750){
 		printf (magneta"VERY GOOD SCORE !!!"def);
 	}
-	else if (level=='H' && score>=65) {
+	else if (difficulty==3 && player_score>=650) {
 		printf (magneta"GOOD SCORE!!!"def);
 	}
-	else if (level=='H' && score<=65){
+	else if (difficulty==3 && player_score<=650){
 		printf (magneta"DON'T WORRY\nKEEP TRYING.......\nIT IS THE HARDEST LEVEL SO IT'S TIME CONSUMING YOU WILL IMPROVE SOON IN SHAA ALLAH"def);
 	}
+    printf(magneta"Game Over, Press any key to Continue"def);
+    getch();
 }
 void input(){
     int i,j,x,y,_continue = 1;
@@ -214,6 +217,7 @@ int user_solution_checker(int row,int col){
     for (int i = 1; i < 10; i++)
     {
        if (arr[i] > 1){
+       	player_score-=20;
        return 1;
        }
     }
@@ -228,6 +232,7 @@ int user_solution_checker(int row,int col){
     for (int i = 1; i < 10; i++)
     {
        if (arr[i] > 1){
+       	player_score-=20;
        return 2;
        }
     }
@@ -340,7 +345,9 @@ void menu(){
         time_t start = time(NULL);
 		input();
         time_t end = time(NULL);  
-             score(start, end); 
+        score(); 
+        printf(green"Time: %d minutes"def,difftime(end,start)/60);
+        remarks(difficulty);
             break;
         case 3:
             {
@@ -370,8 +377,7 @@ int main(){
     return 0;
 }
 
-void score(time_t start, time_t end) {
-    player_score = 1000 - (difftime(end, start) * 0.6);
+void score() {
     FILE *score_file = fopen("score.txt", "a");
 
     if (score_file == NULL) {
