@@ -342,11 +342,11 @@ void menu(){
             fflush(stdin);
     	}
         initializer(difficulty);
-        time_t start = time(NULL);
+     //   time_t start = time(NULL);
 		input();
-        time_t end = time(NULL);  
+       // time_t end = time(NULL);  
         score(); 
-        printf(green"Time: %d minutes"def,difftime(end,start)/60);
+        // printf(green"Time: %d minutes\n "def,difftime(end,start)/60);
         remarks(difficulty);
             break;
         case 3:
@@ -408,7 +408,7 @@ void initializer(int difficulty) {
         printf("Error opening file.\n");
         return; 
     }
-
+	player_score = 1000;
     srand(time(0));
     int select = rand() % 20; 
     int current_line = 0;
