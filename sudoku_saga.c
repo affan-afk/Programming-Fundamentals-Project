@@ -421,7 +421,7 @@ void initializer(int difficulty) {
         current_line++;
     }
     fclose(boards);
-    printf("%s\n",line);
+    
    
     char* value = strtok(line, ",");
     
